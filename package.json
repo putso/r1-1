@@ -44,11 +44,10 @@
     ]
   },
   "lint-staged": {
-    "*.ts": [
-      "prettier --list-different",
+    "src/**/*.ts": [
+      "prettier --write",
       "eslint"
-    ],
-    "*.md": "prettier --list-different"
+    ]
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",

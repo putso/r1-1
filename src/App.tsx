@@ -48,7 +48,7 @@ class App extends React.Component {
   switchStateTask(index: number) {
 
 
-    this.setState((state) => {
+    this.setState(() => {
       return {
         tasks: this.state.tasks.map((el, i) => {
           if (index === i) {
@@ -105,7 +105,6 @@ class App extends React.Component {
       (acc, item) => (!item.completed ? acc + 1 : acc),
       0
     );
-    console.log('sdfsdfsd');
   }
   render() {
     const taskHandlers: taskHandlers = {
