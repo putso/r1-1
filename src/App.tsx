@@ -105,8 +105,8 @@ class App extends React.Component {
       (acc, item) => (!item.completed ? acc + 1 : acc),
       0
     );
+    console.log('sdfsdfsd');
   }
-
   render() {
     const taskHandlers: taskHandlers = {
       deleteTask: this.deleteTask,
