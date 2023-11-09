@@ -1,4 +1,4 @@
-export type filter = "all" | "active" | "completed";
+export type filter = 'all' | 'active' | 'completed';
 export interface iTask {
   completed: boolean;
   value: string;

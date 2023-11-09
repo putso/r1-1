@@ -1,5 +1,5 @@
-import React from "react";
-import { iTask, taskHandlers } from "../type";
+import React from 'react';
+import { iTask, taskHandlers } from '../type';
 
 type props = {
   data: iTask;
@@ -9,7 +9,7 @@ type props = {
 export default class Task extends React.Component<props, object> {
   state = {
     canInput: false,
-    editValue: this.props.data.value
+    editValue: this.props.data.value,
   };
   constructor(props: props) {
     super(props);
@@ -18,59 +18,53 @@ export default class Task extends React.Component<props, object> {
     this.onChangeEdit = this.onChangeEdit.bind(this);
   }
   switchStateInput() {
-    this.setState( () => {
+    this.setState(() => {
       return {
-        canInput: !this.state.canInput
+        canInput: !this.state.canInput,
       };
-    })
+    });
   }
-  editHandler(e:React.KeyboardEvent<HTMLInputElement>) {
-    const {changeTaskText} = this.props.taskHandlers;
-    if(e.key == 'Enter') {
-      changeTaskText(this.props.index,this.state.editValue); 
+  editHandler(e: React.KeyboardEvent<HTMLInputElement>) {
+    const { changeTaskText } = this.props.taskHandlers;
+    if (e.key == 'Enter') {
+      changeTaskText(this.props.index, this.state.editValue);
       this.switchStateInput();
       return;
     }
-
-
-
-
   }
-  onChangeEdit(e:React.ChangeEvent<HTMLInputElement>) {
-    this.setState( () => {
+  onChangeEdit(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState(() => {
       return {
-        editValue: e.target.value
-      }
-    })
+        editValue: e.target.value,
+      };
+    });
   }
   render() {
     const { taskHandlers, index, data } = this.props;
-    const { switchStateTask,deleteTask } = taskHandlers;
+    const { switchStateTask, deleteTask } = taskHandlers;
     const getClassState = () => {
-      if(this.state.canInput) return 'editing';
-      if(data.completed) return 'completed';
+      if (this.state.canInput) return 'editing';
+      if (data.completed) return 'completed';
       return '';
-    }
+    };
     return (
       <li className={getClassState()}>
         <div className="view">
-          <input
-            className="toggle"
-            onChange={() => switchStateTask(index)}
-            checked={data.completed}
-            type="checkbox"
-          />
+          <input className="toggle" onChange={() => switchStateTask(index)} checked={data.completed} type="checkbox" />
           <label>
             <span className="description">{data.value}</span>
             <span className="created">created 17 seconds ago</span>
           </label>
           <button onClick={this.switchStateInput} className="icon icon-edit"></button>
-          <button
-            onClick={() => deleteTask(index)}
-            className="icon icon-destroy"
-          ></button>
+          <button onClick={() => deleteTask(index)} className="icon icon-destroy"></button>
         </div>
-        <input onKeyDown={(e) => this.editHandler(e)} onChange={(e) => this.onChangeEdit(e) }  type="text" className="edit" value={this.state.editValue}></input>
+        <input
+          onKeyDown={(e) => this.editHandler(e)}
+          onChange={(e) => this.onChangeEdit(e)}
+          type="text"
+          className="edit"
+          value={this.state.editValue}
+        ></input>
       </li>
     );
   }

@@ -1,10 +1,11 @@
-import React from "react";
-import "./App.css";
-import NewTaskForm from "./componets/NewTaskForm";
-import TaskList from "./componets/TaskList";
-import Footer from "./componets/Footer";
-import { filter, iTask, taskHandlers } from "./type";
-import TasksFilter from "./componets/TasksFilter";
+import React from 'react';
+import './App.css';
+import NewTaskForm from './componets/NewTaskForm';
+import TaskList from './componets/TaskList';
+import Footer from './componets/Footer';
+import { filter, iTask, taskHandlers } from './type';
+import TasksFilter from './componets/TasksFilter';
+
 type state = {
   tasks: iTask[];
   filter: filter;
@@ -12,7 +13,7 @@ type state = {
 class App extends React.Component {
   state: state = {
     tasks: [],
-    filter: "all",
+    filter: 'all',
   };
   constructor(props: object) {
     super(props);
@@ -85,24 +86,21 @@ class App extends React.Component {
   }
   getFilteredTask(filter: filter) {
     return this.state.tasks.filter((task) => {
-      if (filter === "all") return true;
-      const isCompleted = filter == "completed";
+      if (filter === 'all') return true;
+      const isCompleted = filter == 'completed';
       return isCompleted === task.completed;
     });
   }
   clearCompleted() {
     this.setState(() => {
-      const unCompetedTasks = this.getFilteredTask("active");
+      const unCompetedTasks = this.getFilteredTask('active');
       return {
         tasks: unCompetedTasks,
       };
     });
   }
   countActiveTask() {
-    return this.state.tasks.reduce(
-      (acc, item) => (!item.completed ? acc + 1 : acc),
-      0,
-    );
+    return this.state.tasks.reduce((acc, item) => (!item.completed ? acc + 1 : acc), 0);
   }
   render() {
     const taskHandlers: taskHandlers = {
@@ -113,8 +111,8 @@ class App extends React.Component {
     };
     const filteredTask = this.state.tasks.filter((task) => {
       const filter = this.state.filter;
-      if (filter === "all") return true;
-      const isCompleted = filter == "completed";
+      if (filter === 'all') return true;
+      const isCompleted = filter == 'completed';
       return isCompleted === task.completed;
     });
     const itemsLeft = this.countActiveTask();
@@ -127,10 +125,7 @@ class App extends React.Component {
           <NewTaskForm addTask={this.addTask} />
           <TaskList tasks={filteredTask} taskHandlers={taskHandlers} />
           <Footer clearCompleted={this.clearCompleted} itemsLeft={itemsLeft}>
-            <TasksFilter
-              setFilter={this.setFilter}
-              filter={this.state.filter}
-            />
+            <TasksFilter setFilter={this.setFilter} filter={this.state.filter} />
           </Footer>
         </section>
       </main>
