@@ -46,6 +46,14 @@ class App extends React.Component {
     });
   }
   switchStateTask(index: number) {
+
+
+
+
+
+
+
+    
     this.setState(() => {
       return {
         tasks: this.state.tasks.map((el, i) => {
@@ -72,10 +80,6 @@ class App extends React.Component {
     });
   }
   deleteTask(index: number) {
-
-
-
-    
     this.setState(() => {
       return {
         tasks: this.state.tasks.filter((el, i) => i !== index),
