@@ -1,12 +1,22 @@
 import React from 'react';
 import { iTask, taskHandlers } from '../type';
+import { formatDistanceToNow } from 'date-fns';
 
 type props = {
   data: iTask;
   taskHandlers: taskHandlers;
-  index: number;
+};
+
+const defaultTaskHandlers = {
+  addTask: () => {},
+  changeTaskText: () => {},
+  deleteTask: () => {},
+  switchStateTask: () => {},
 };
 export default class Task extends React.Component<props, object> {
+  static defaultProps = {
+    taskHandlers: defaultTaskHandlers,
+  };
   state = {
     canInput: false,
     editValue: this.props.data.value,
@@ -58,7 +68,7 @@ export default class Task extends React.Component<props, object> {
           />
           <label>
             <span className="description">{data.value}</span>
-            <span className="created">created 17 seconds ago</span>
+            <span className="created">{formatDistanceToNow(new Date(data.created), { addSuffix: true })}</span>
           </label>
           <button onClick={this.switchStateInput} className="icon icon-edit"></button>
           <button onClick={() => deleteTask(data)} className="icon icon-destroy"></button>

@@ -9,7 +9,6 @@ export default class TaskList extends React.Component<{ taskHandlers: taskHandle
   };
   render() {
     const { taskHandlers, tasks } = this.props;
-    console.log(tasks);
     return (
       <ul className="todo-list">
         {tasks.map((task) => (

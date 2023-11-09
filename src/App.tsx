@@ -75,7 +75,7 @@ class App extends React.Component {
   deleteTask(task: iTask) {
     this.setState(() => {
       return {
-        tasks: this.state.tasks.filter((el) => el == task),
+        tasks: this.state.tasks.filter((el) => el != task),
       };
     });
   }

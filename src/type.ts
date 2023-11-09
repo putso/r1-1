@@ -10,5 +10,3 @@ export interface taskHandlers {
   deleteTask: (task: iTask) => void;
   addTask: (value: string) => void;
 }
-const t = 0;
-console.log(t);
