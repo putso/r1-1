@@ -72,10 +72,6 @@ class App extends React.Component {
     });
   }
   deleteTask(index: number) {
-    console.log(
-      index,
-      this.state.tasks.filter((el, i) => i !== index)
-    );
     this.setState(() => {
       return {
         tasks: this.state.tasks.filter((el, i) => i !== index),

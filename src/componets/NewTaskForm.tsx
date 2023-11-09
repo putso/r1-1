@@ -13,7 +13,6 @@ export default class NewTaskForm extends React.Component<props,object>{
   }
   newTaskHandler(e:React.KeyboardEvent<HTMLInputElement>) {
     if(e.key !== 'Enter') return;
-    console.log(this);
 
     this.props.addTask(this.state.taskText);
     this.setState( () => ({
@@ -21,7 +20,6 @@ export default class NewTaskForm extends React.Component<props,object>{
     }));
   }
   render(): React.ReactNode {
-    console.log(this);
     return (
       <div>
         <input onKeyDown={this.newTaskHandler}
