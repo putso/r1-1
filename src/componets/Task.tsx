@@ -68,7 +68,9 @@ export default class Task extends React.Component<props, object> {
           />
           <label>
             <span className="description">{data.value}</span>
-            <span className="created">{formatDistanceToNow(new Date(data.created), { addSuffix: true })}</span>
+            <span className="created">
+              {formatDistanceToNow(new Date(data.created), { addSuffix: true, includeSeconds: true })}
+            </span>
           </label>
           <button onClick={this.switchStateInput} className="icon icon-edit"></button>
           <button onClick={() => deleteTask(data)} className="icon icon-destroy"></button>
