@@ -5,9 +5,9 @@ export interface iTask {
   created: number;
 }
 export interface taskHandlers {
-  changeTaskText: (id: number, value: string) => void;
-  switchStateTask: (index: number) => void;
-  deleteTask: (index: number) => void;
+  changeTaskText: (task: iTask, value: string) => void;
+  switchStateTask: (task: iTask) => void;
+  deleteTask: (task: iTask) => void;
   addTask: (value: string) => void;
 }
 const t = 0;

@@ -9,21 +9,13 @@ export default class TaskList extends React.Component<{ taskHandlers: taskHandle
   };
   render() {
     const { taskHandlers, tasks } = this.props;
+    console.log(tasks);
     return (
       <ul className="todo-list">
-        {tasks.map((task, i) => (
-          <Task key={task.created} data={task} index={i} taskHandlers={taskHandlers} />
+        {tasks.map((task) => (
+          <Task key={task.created} data={task} taskHandlers={taskHandlers} />
         ))}
       </ul>
     );
   }
 }
-// export default function TaskList() {
-//   return (
-//     <ul className="todo-list">
-//       {/* {tasks.map((task, i) => (
-//         <Task key={task.created} data={task} index={i} taskHandlers = {taskHandlers}/>
-//       ))} */}
-//     </ul>
-//   );
-// }

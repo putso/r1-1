@@ -46,11 +46,11 @@ class App extends React.Component {
       };
     });
   }
-  switchStateTask(index: number) {
+  switchStateTask(task: iTask) {
     this.setState(() => {
       return {
-        tasks: this.state.tasks.map((el, i) => {
-          if (index === i) {
+        tasks: this.state.tasks.map((el) => {
+          if (task == el) {
             el = { ...el };
             el.completed = !el.completed;
           }
@@ -59,11 +59,11 @@ class App extends React.Component {
       };
     });
   }
-  changeTaskText(index: number, value: string) {
+  changeTaskText(task: iTask, value: string) {
     this.setState(() => {
       return {
-        tasks: this.state.tasks.map((el, i) => {
-          if (index === i) {
+        tasks: this.state.tasks.map((el) => {
+          if (el === task) {
             el = { ...el };
             el.value = value;
           }
@@ -72,10 +72,10 @@ class App extends React.Component {
       };
     });
   }
-  deleteTask(index: number) {
+  deleteTask(task: iTask) {
     this.setState(() => {
       return {
-        tasks: this.state.tasks.filter((el, i) => i !== index),
+        tasks: this.state.tasks.filter((el) => el == task),
       };
     });
   }

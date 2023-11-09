@@ -27,7 +27,7 @@ export default class Task extends React.Component<props, object> {
   editHandler(e: React.KeyboardEvent<HTMLInputElement>) {
     const { changeTaskText } = this.props.taskHandlers;
     if (e.key == 'Enter') {
-      changeTaskText(this.props.index, this.state.editValue);
+      changeTaskText(this.props.data, this.state.editValue);
       this.switchStateInput();
       return;
     }
@@ -40,7 +40,7 @@ export default class Task extends React.Component<props, object> {
     });
   }
   render() {
-    const { taskHandlers, index, data } = this.props;
+    const { taskHandlers, data } = this.props;
     const { switchStateTask, deleteTask } = taskHandlers;
     const getClassState = () => {
       if (this.state.canInput) return 'editing';
@@ -50,13 +50,18 @@ export default class Task extends React.Component<props, object> {
     return (
       <li className={getClassState()}>
         <div className="view">
-          <input className="toggle" onChange={() => switchStateTask(index)} checked={data.completed} type="checkbox" />
+          <input
+            className="toggle"
+            onChange={() => switchStateTask(this.props.data)}
+            checked={data.completed}
+            type="checkbox"
+          />
           <label>
             <span className="description">{data.value}</span>
             <span className="created">created 17 seconds ago</span>
           </label>
           <button onClick={this.switchStateInput} className="icon icon-edit"></button>
-          <button onClick={() => deleteTask(index)} className="icon icon-destroy"></button>
+          <button onClick={() => deleteTask(data)} className="icon icon-destroy"></button>
         </div>
         <input
           onKeyDown={(e) => this.editHandler(e)}

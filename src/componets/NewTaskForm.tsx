@@ -11,7 +11,7 @@ export default class NewTaskForm extends React.Component<props, object> {
     this.newTaskHandler = this.newTaskHandler.bind(this);
   }
   newTaskHandler(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key !== 'Enter') return;
+    if (e.key !== 'Enter' || this.state.taskText == '') return;
 
     this.props.addTask(this.state.taskText);
     this.setState(() => ({
