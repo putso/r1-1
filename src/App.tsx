@@ -48,12 +48,6 @@ class App extends React.Component {
   switchStateTask(index: number) {
 
 
-
-
-
-
-
-
     this.setState((state) => {
       return {
         tasks: this.state.tasks.map((el, i) => {
