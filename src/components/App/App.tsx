@@ -1,10 +1,10 @@
 import React from 'react';
 import './App.css';
-import NewTaskForm from './componets/NewTaskForm';
-import TaskList from './componets/TaskList';
-import Footer from './componets/Footer';
-import { filter, iTask, taskHandlers } from './type';
-import TasksFilter from './componets/TasksFilter';
+import NewTaskForm from '@components/NewTaskForm';
+import TaskList from '@components/TaskList';
+import Footer from '@components/Footer';
+import { filter, iTask, taskHandlers } from '@src/type';
+import TasksFilter from '@components/TasksFilter';
 
 type state = {
   tasks: iTask[];
