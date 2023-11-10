@@ -22,7 +22,7 @@ import React from 'react';
 //   }
 // }
 
-export default function Footer1({
+export default function Footer({
   children,
   clearCompleted,
   itemsLeft,
