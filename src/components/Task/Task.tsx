@@ -11,7 +11,7 @@ function getTimeMseconds(endTime: number) {
 }
 function getTimeDuration(time: number) {
   const interval = intervalToDuration({ start: 0, end: time });
-  return `${interval.hours ? interval.hours + ':' : ''}${interval.minutes}:${interval.seconds}`;
+  return [interval.hours, interval.minutes, interval.seconds].map((el) => String(el).padStart(2, '0')).join(':');
 }
 const defaultTaskHandlers = {
   addTask: () => {},
@@ -81,7 +81,6 @@ export default class Task extends React.Component<props, state> {
   componentDidUpdate(prevProps: Readonly<props>): void {
     if (prevProps.data.completed == this.props.data.completed) return;
     if (this.props.data.completed) this.pause();
-    else this.play();
   }
   editHandler(e: React.KeyboardEvent<HTMLInputElement>) {
     const { changeTaskText } = this.props.taskHandlers;
