@@ -26,8 +26,7 @@ export default class NewTaskForm extends React.Component<props, state> {
     if (
       e.key !== 'Enter' ||
       this.state.taskText.trim() == '' ||
-      this.state.minutes.trim() == '' ||
-      this.state.seconds.trim() == ''
+      (this.state.minutes.trim() == '' && this.state.seconds.trim() == '')
     )
       return;
     let date = new Date(Date.now());
@@ -45,13 +44,12 @@ export default class NewTaskForm extends React.Component<props, state> {
     this.setState(() => ({ seconds: String(minmax(0, 60, value)) }));
   };
   setMinutes = (value: number) => {
-    this.setState(() => ({ minutes: String(minmax(0, 60, value)) }));
+    this.setState(() => ({ minutes: String(minmax(0, 999, value)) }));
   };
   render(): React.ReactNode {
     return (
-      <div className="new-todo-form">
+      <div className="new-todo-form" onKeyDown={this.newTaskHandler}>
         <input
-          onKeyDown={this.newTaskHandler}
           className="new-todo"
           placeholder="What needs to be done?"
           autoFocus
@@ -71,7 +69,6 @@ export default class NewTaskForm extends React.Component<props, state> {
           onChange={(e) => this.setMinutes(Number(e.target.value))}
           value={this.state.minutes}
           placeholder="Min"
-          autoFocus
         />
         <input
           className="new-todo-form__timer"
@@ -80,7 +77,6 @@ export default class NewTaskForm extends React.Component<props, state> {
           onChange={(e) => this.setSeconds(Number(e.target.value))}
           value={this.state.seconds}
           placeholder="Sec"
-          autoFocus
         />
       </div>
     );

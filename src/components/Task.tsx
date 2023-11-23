@@ -47,7 +47,9 @@ export default class Task extends React.Component<
       currentTime: Date.now(),
     };
   }
-
+  componentWillUnmount(): void {
+    clearInterval(this.state.intervalId);
+  }
   updateTime = () => {
     if (this.state.isPause) return;
     console.log('updatetime');
@@ -66,6 +68,7 @@ export default class Task extends React.Component<
     }));
   }
   play = () => {
+    if (!this.state.isPause) return;
     this.setState(() => ({ isPause: false, currentTime: Date.now() }));
   };
   pause = () => {
