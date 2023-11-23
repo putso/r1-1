@@ -27,11 +27,12 @@ class App extends React.Component {
     this.clearCompleted = this.clearCompleted.bind(this);
     this.countActiveTask = this.countActiveTask.bind(this);
   }
-  addTask(value: string) {
+  addTask(value: string, timer: number) {
     const newTask: iTask = {
       value,
       completed: false,
       created: Date.now(),
+      timer,
     };
     this.setState(() => {
       return {

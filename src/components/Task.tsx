@@ -1,32 +1,76 @@
 import React from 'react';
 import { iTask, taskHandlers } from '../type';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow, formatDuration, intervalToDuration } from 'date-fns';
 
 type props = {
   data: iTask;
   taskHandlers: taskHandlers;
 };
-
+function getTimeMseconds(endTime: number) {
+  return endTime - Date.now();
+}
+function getTimeDuration(time: number) {
+  return formatDuration(intervalToDuration({ start: 0, end: time }));
+}
 const defaultTaskHandlers = {
   addTask: () => {},
   changeTaskText: () => {},
   deleteTask: () => {},
   switchStateTask: () => {},
 };
-export default class Task extends React.Component<props, object> {
+export default class Task extends React.Component<
+  props,
+  {
+    canInput: boolean;
+    editValue: string;
+    intervalId?: NodeJS.Timer;
+    time: number;
+    isPause: boolean;
+    currentTime: number;
+  }
+> {
   static defaultProps = {
     taskHandlers: defaultTaskHandlers,
   };
-  state = {
-    canInput: false,
-    editValue: this.props.data.value,
-  };
+
   constructor(props: props) {
     super(props);
     this.switchStateInput = this.switchStateInput.bind(this);
     this.editHandler = this.editHandler.bind(this);
     this.onChangeEdit = this.onChangeEdit.bind(this);
+    this.state = {
+      canInput: false,
+      editValue: this.props.data.value,
+      intervalId: undefined,
+      time: getTimeMseconds(props.data.timer),
+      isPause: false,
+      currentTime: Date.now(),
+    };
   }
+
+  updateTime = () => {
+    if (this.state.isPause) return;
+    console.log('updatetime');
+    let time = this.state.time - (Date.now() - this.state.currentTime);
+    if (time < 0) {
+      clearInterval(this.state.intervalId);
+      time = 0;
+    }
+    this.setState(() => ({ time, currentTime: Date.now() }));
+  };
+  componentDidMount(): void {
+    console.log('mount');
+    const id = setInterval(this.updateTime, 1000);
+    this.setState(() => ({
+      intervalId: id,
+    }));
+  }
+  play = () => {
+    this.setState(() => ({ isPause: false, currentTime: Date.now() }));
+  };
+  pause = () => {
+    this.setState(() => ({ isPause: true }));
+  };
   switchStateInput() {
     this.setState(() => {
       return {
@@ -57,6 +101,7 @@ export default class Task extends React.Component<props, object> {
       if (data.completed) return 'completed';
       return '';
     };
+    console.log(this.state.time);
     return (
       <li className={getClassState()}>
         <div className="view">
@@ -67,8 +112,13 @@ export default class Task extends React.Component<props, object> {
             type="checkbox"
           />
           <label>
-            <span className="description">{data.value}</span>
-            <span className="created">
+            <span className="title">{data.value}</span>
+            <span className="description timer-control">
+              <button className="icon icon-play" onClick={this.play}></button>
+              <button className="icon icon-pause" onClick={this.pause}></button>
+              <span className="timer">{getTimeDuration(this.state.time)}</span>
+            </span>
+            <span className="description">
               {formatDistanceToNow(new Date(data.created), { addSuffix: true, includeSeconds: true })}
             </span>
           </label>
