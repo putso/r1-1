@@ -101,7 +101,7 @@ class App extends React.Component {
     });
   }
   countActiveTask() {
-    return this.state.tasks.reduce((acc, item) => (!item.completed ? acc + 1 : acc), 0);
+    return this.state.tasks.filter((item) => !item.completed).length;
   }
   render() {
     const taskHandlers: taskHandlers = {
