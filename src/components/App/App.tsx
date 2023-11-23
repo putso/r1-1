@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.scss';
 import NewTaskForm from '@/components/NewTaskForm';
 import TaskList from '@/components/TaskList';
@@ -6,132 +6,93 @@ import Footer from '@/components/Footer';
 import { filter, iTask, taskHandlers } from '@/type';
 import TasksFilter from '@/components/TasksFilter';
 
-type state = {
-  tasks: iTask[];
-  filter: filter;
-};
-class App extends React.Component {
-  state: state = {
-    tasks: [],
-    filter: 'all',
-  };
-  constructor(props: object) {
-    super(props);
-    this.addTask = this.addTask.bind(this);
-    this.changeFilter = this.changeFilter.bind(this);
-    this.switchStateTask = this.switchStateTask.bind(this);
-    this.changeTaskText = this.changeTaskText.bind(this);
-    this.deleteTask = this.deleteTask.bind(this);
-    this.setFilter = this.setFilter.bind(this);
-    this.getFilteredTask = this.getFilteredTask.bind(this);
-    this.clearCompleted = this.clearCompleted.bind(this);
-    this.countActiveTask = this.countActiveTask.bind(this);
-  }
-  addTask(value: string, timer: number) {
+const App = () => {
+  const [tasks, setTasks] = useState<iTask[]>([]);
+  const [filter, setFilter] = useState<filter>('all');
+  function addTask(value: string, timer: number) {
     const newTask: iTask = {
       value,
       completed: false,
       created: Date.now(),
       timer,
     };
-    this.setState(() => {
-      return {
-        tasks: [...this.state.tasks, newTask],
-      };
+    setTasks((prevTasks) => {
+      return [...prevTasks, newTask];
     });
   }
-  changeFilter(value: filter) {
-    this.setState(() => {
-      return {
-        filter: value,
-      };
+
+  function switchStateTask(task: iTask) {
+    setTasks((tasks) => {
+      return tasks.map((el) => {
+        if (task == el) {
+          el = { ...el };
+          el.completed = !el.completed;
+        }
+        return el;
+      });
     });
   }
-  switchStateTask(task: iTask) {
-    this.setState(() => {
-      return {
-        tasks: this.state.tasks.map((el) => {
-          if (task == el) {
-            el = { ...el };
-            el.completed = !el.completed;
-          }
-          return el;
-        }),
-      };
+  function changeTaskText(task: iTask, value: string) {
+    setTasks((tasks) => {
+      return tasks.map((el) => {
+        if (el === task) {
+          el = { ...el };
+          el.value = value;
+        }
+        return el;
+      });
     });
   }
-  changeTaskText(task: iTask, value: string) {
-    this.setState(() => {
-      return {
-        tasks: this.state.tasks.map((el) => {
-          if (el === task) {
-            el = { ...el };
-            el.value = value;
-          }
-          return el;
-        }),
-      };
+  function deleteTask(task: iTask) {
+    setTasks((tasks) => {
+      return tasks.filter((el) => el != task);
     });
   }
-  deleteTask(task: iTask) {
-    this.setState(() => {
-      return {
-        tasks: this.state.tasks.filter((el) => el != task),
-      };
-    });
+  function updateFilter(filter: filter) {
+    setFilter(() => filter);
   }
-  setFilter(filter: filter) {
-    this.setState(() => ({
-      filter,
-    }));
-  }
-  getFilteredTask(filter: filter) {
-    return this.state.tasks.filter((task) => {
+  function getFilteredTask(filter: filter) {
+    return tasks.filter((task) => {
       if (filter === 'all') return true;
       const isCompleted = filter == 'completed';
       return isCompleted === task.completed;
     });
   }
-  clearCompleted() {
-    this.setState(() => {
-      const unCompetedTasks = this.getFilteredTask('active');
-      return {
-        tasks: unCompetedTasks,
-      };
+  function clearCompleted() {
+    setTasks(() => {
+      const unCompetedTasks = getFilteredTask('active');
+      return unCompetedTasks;
     });
   }
-  countActiveTask() {
-    return this.state.tasks.reduce((acc, item) => (!item.completed ? acc + 1 : acc), 0);
+  function countActiveTask() {
+    return tasks.reduce((acc, item) => (!item.completed ? acc + 1 : acc), 0);
   }
-  render() {
-    const taskHandlers: taskHandlers = {
-      deleteTask: this.deleteTask,
-      changeTaskText: this.changeTaskText,
-      switchStateTask: this.switchStateTask,
-      addTask: this.addTask,
-    };
-    const filteredTask = this.state.tasks.filter((task) => {
-      const filter = this.state.filter;
-      if (filter === 'all') return true;
-      const isCompleted = filter == 'completed';
-      return isCompleted === task.completed;
-    });
-    const itemsLeft = this.countActiveTask();
-    return (
-      <main className="todoapp">
-        <header>
-          <h1>todos</h1>
-        </header>
-        <section className="main">
-          <NewTaskForm addTask={this.addTask} />
-          <TaskList tasks={filteredTask} taskHandlers={taskHandlers} />
-          <Footer clearCompleted={this.clearCompleted} itemsLeft={itemsLeft}>
-            <TasksFilter setFilter={this.setFilter} filter={this.state.filter} />
-          </Footer>
-        </section>
-      </main>
-    );
-  }
-}
+  const taskHandlers: taskHandlers = {
+    deleteTask: deleteTask,
+    changeTaskText: changeTaskText,
+    switchStateTask: switchStateTask,
+    addTask: addTask,
+  };
+  const filteredTask = tasks.filter((task) => {
+    if (filter === 'all') return true;
+    const isCompleted = filter == 'completed';
+    return isCompleted === task.completed;
+  });
+  const itemsLeft = countActiveTask();
+  return (
+    <main className="todoapp">
+      <header>
+        <h1>todos</h1>
+      </header>
+      <section className="main">
+        <NewTaskForm addTask={addTask} />
+        <TaskList tasks={filteredTask} taskHandlers={taskHandlers} />
+        <Footer clearCompleted={clearCompleted} itemsLeft={itemsLeft}>
+          <TasksFilter setFilter={updateFilter} filter={filter} />
+        </Footer>
+      </section>
+    </main>
+  );
+};
 
 export default App;
