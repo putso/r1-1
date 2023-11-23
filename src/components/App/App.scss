@@ -1,7 +1,3 @@
-/*
-	Hack to remove background from Mobile Safari.
-	Can't use it globally since it destroys checkboxes in Firefox
-*/
 html {
 	margin: 0;
 	padding: 0;
@@ -46,7 +42,7 @@ button {
 		border: none;
 	}
 }
-&:focus {
+input:focus {
 	outline: 0;
 }
 .hidden {
@@ -431,7 +427,7 @@ input[type=number] {
 	display: flex;
 	gap: 5px;
 	align-items: center;
-	.span { display: block;
+	.span { display: block;}
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {
 	.toggle-all {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { filter } from '../type';
+import { filter } from '../../type';
 const filters: Capitalize<filter>[] = ['Active', 'All', 'Completed'];
 export default function TasksFilter({ filter, setFilter }: { setFilter: (filter: filter) => void; filter: filter }) {
   return (

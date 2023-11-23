@@ -1,5 +1,5 @@
 import React from 'react';
-import { iTask, taskHandlers } from '../type';
+import { iTask, taskHandlers } from '@/type';
 import { formatDistanceToNow, intervalToDuration } from 'date-fns';
 
 type props = {
@@ -19,17 +19,15 @@ const defaultTaskHandlers = {
   deleteTask: () => {},
   switchStateTask: () => {},
 };
-export default class Task extends React.Component<
-  props,
-  {
-    canInput: boolean;
-    editValue: string;
-    intervalId?: NodeJS.Timer;
-    time: number;
-    isPause: boolean;
-    currentTime: number;
-  }
-> {
+type state = {
+  canInput: boolean;
+  editValue: string;
+  intervalId?: NodeJS.Timer;
+  time: number;
+  isPause: boolean;
+  currentTime: number;
+};
+export default class Task extends React.Component<props, state> {
   static defaultProps = {
     taskHandlers: defaultTaskHandlers,
   };
@@ -44,7 +42,7 @@ export default class Task extends React.Component<
       editValue: this.props.data.value,
       intervalId: undefined,
       time: getTimeMseconds(props.data.timer),
-      isPause: false,
+      isPause: true,
       currentTime: Date.now(),
     };
   }
@@ -67,7 +65,7 @@ export default class Task extends React.Component<
     }));
   }
   play = () => {
-    if (!this.state.isPause) return;
+    if (!this.state.isPause || this.props.data.completed) return;
     this.setState(() => ({ isPause: false, currentTime: Date.now() }));
   };
   pause = () => {
@@ -79,6 +77,11 @@ export default class Task extends React.Component<
         canInput: !this.state.canInput,
       };
     });
+  }
+  componentDidUpdate(prevProps: Readonly<props>): void {
+    if (prevProps.data.completed == this.props.data.completed) return;
+    if (this.props.data.completed) this.pause();
+    else this.play();
   }
   editHandler(e: React.KeyboardEvent<HTMLInputElement>) {
     const { changeTaskText } = this.props.taskHandlers;
