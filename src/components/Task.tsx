@@ -1,6 +1,6 @@
 import React from 'react';
 import { iTask, taskHandlers } from '../type';
-import { formatDistanceToNow, formatDuration, intervalToDuration } from 'date-fns';
+import { formatDistanceToNow, intervalToDuration } from 'date-fns';
 
 type props = {
   data: iTask;
@@ -10,7 +10,8 @@ function getTimeMseconds(endTime: number) {
   return endTime - Date.now();
 }
 function getTimeDuration(time: number) {
-  return formatDuration(intervalToDuration({ start: 0, end: time }));
+  const interval = intervalToDuration({ start: 0, end: time });
+  return `${interval.hours ? interval.hours + ':' : ''}${interval.minutes}:${interval.seconds}`;
 }
 const defaultTaskHandlers = {
   addTask: () => {},
@@ -52,7 +53,6 @@ export default class Task extends React.Component<
   }
   updateTime = () => {
     if (this.state.isPause) return;
-    console.log('updatetime');
     let time = this.state.time - (Date.now() - this.state.currentTime);
     if (time < 0) {
       clearInterval(this.state.intervalId);
@@ -61,7 +61,6 @@ export default class Task extends React.Component<
     this.setState(() => ({ time, currentTime: Date.now() }));
   };
   componentDidMount(): void {
-    console.log('mount');
     const id = setInterval(this.updateTime, 1000);
     this.setState(() => ({
       intervalId: id,
@@ -104,7 +103,6 @@ export default class Task extends React.Component<
       if (data.completed) return 'completed';
       return '';
     };
-    console.log(this.state.time);
     return (
       <li className={getClassState()}>
         <div className="view">
