@@ -5,16 +5,20 @@ import TaskList from '@/components/TaskList';
 import Footer from '@/components/Footer';
 import { filter, iTask, taskHandlers } from '@/type';
 import TasksFilter from '@/components/TasksFilter';
-
+import useTimer from '@/hooks/useTimer';
 const App = () => {
   const [tasks, setTasks] = useState<iTask[]>([]);
   const [filter, setFilter] = useState<filter>('all');
-  function addTask(value: string, timer: number) {
+  const { play, pause } = useTimer(setTasks);
+  function addTask(value: string, time: number) {
     const newTask: iTask = {
       value,
       completed: false,
       created: Date.now(),
-      timer,
+      timer: {
+        time,
+        isPause: true,
+      },
     };
     setTasks((prevTasks) => {
       return [...prevTasks, newTask];
@@ -27,6 +31,7 @@ const App = () => {
         if (task == el) {
           el = { ...el };
           el.completed = !el.completed;
+          el.timer.isPause = el.completed;
         }
         return el;
       });
@@ -72,6 +77,8 @@ const App = () => {
     changeTaskText: changeTaskText,
     switchStateTask: switchStateTask,
     addTask: addTask,
+    play: play,
+    pause: pause,
   };
   const filteredTask = tasks.filter((task) => {
     if (filter === 'all') return true;

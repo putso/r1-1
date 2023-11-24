@@ -1,12 +1,9 @@
-import { addMinutes, addSeconds } from 'date-fns';
+import minmax, { getTimeMseconds } from '@/helpers';
 import React, { useState } from 'react';
 type props = {
   addTask: (value: string, tiemr: number) => void;
 };
 
-function minmax(min: number, max: number, value: number) {
-  return Math.max(min, Math.min(max, value));
-}
 export default function NewTaskForm({ addTask }: props) {
   const [taskText, setTaskText] = useState<string>('');
   const [minutes, setMinutes] = useState<string>('');
@@ -14,10 +11,7 @@ export default function NewTaskForm({ addTask }: props) {
 
   function newTaskHandler(e: React.KeyboardEvent<HTMLInputElement>) {
     if (e.key !== 'Enter' || taskText.trim() == '' || (minutes.trim() == '' && seconds.trim() == '')) return;
-    let date = new Date(Date.now());
-    date = addMinutes(date, Number(minutes));
-    date = addSeconds(date, Number(seconds));
-    addTask(taskText, date.getTime());
+    addTask(taskText, getTimeMseconds(Number(minutes), Number(seconds)));
     setTaskText('');
     setMinutes('');
     setSeconds('');
